@@ -3,14 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/GitHub/OpenGL/src/Constants.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/SceneShaderProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/ModelLoader.java</file>
             <file>file:/G:/GitHub/OpenGL/src/Main.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/Shader.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/Model.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/Camera.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/OpenGLStarter.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/LightSource.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/TextureLoader.java</file>
         </group>
     </open-files>
 </project-private>

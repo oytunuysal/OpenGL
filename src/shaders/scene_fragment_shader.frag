@@ -1,8 +1,8 @@
-    #version 150 core
+    #version 420 core
 
 struct Material {
-    sampler2D diffuse;
-    sampler2D specular;
+    layout (binding = 1) sampler2D diffuse;
+    layout (binding = 2) sampler2D specular;
     float shininess;
 };
 
@@ -17,15 +17,15 @@ struct Light {
     float linear;
     float quadratic;
 };
+uniform int lightCount;
     #define NR_POINT_LIGHTS 2  
 uniform Light pointLights[NR_POINT_LIGHTS];
 
-in vec3 Color;
 in vec2 Texcoord;
 in vec3 NormalVector;
 in vec3 FragPos;
 out vec4 outColor;
-uniform sampler2D tex;
+layout (binding = 0) uniform sampler2D tex;
 uniform vec3 viewPos;
 
 uniform Material material;
@@ -39,10 +39,9 @@ void main() {
 
     vec3 result;
 
-    for(int i = 0; i < NR_POINT_LIGHTS; i++)
+    for(int i = 0; i < lightCount; i++)
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 
-    result *=Color;
     vec4 FragColor = vec4(result, 1.0);
     outColor = FragColor * texture(tex, Texcoord);
 }

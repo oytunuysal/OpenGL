@@ -1,5 +1,6 @@
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -21,8 +22,10 @@ public class SceneShaderProgram extends ShaderProgram {
     private final int model, view, proj, uniformInverseTransposedModel;
     private final int lightPosition, lightAmbient, lightDiffuse, lightSpecular,
             lightConstant, lightLinear, lightQuadratic,
-            materialDiffuse, materialSpecular, materialShininess;
+            materialDiffuse, materialSpecular, materialShininess,
+            lightCount;
     private final int viewPos;
+    private int numberOfLights;
 
     public SceneShaderProgram() {
         shaderProgramLocation = GL20.glCreateProgram();
@@ -56,13 +59,17 @@ public class SceneShaderProgram extends ShaderProgram {
         materialDiffuse = getUniformLocation("material.diffuse");
         materialSpecular = getUniformLocation("material.specular");
         materialShininess = getUniformLocation("material.shininess");
+
+        this.numberOfLights = 0;
+        lightCount = getUniformLocation("lightCount");
     }
 
-    public void specifySceneVertexAttribute(WorldModel model) {
-        specifyVertexAttribute(model, "position", 3, GL11.GL_FLOAT, true, Float.BYTES * 11, 0);
-        specifyVertexAttribute(model, "color", 3, GL11.GL_FLOAT, false, Float.BYTES * 11, Float.BYTES * 3);
-        specifyVertexAttribute(model, "texcoord", 2, GL11.GL_FLOAT, false, Float.BYTES * 11, Float.BYTES * 6);
-        specifyVertexAttribute(model, "normalVector", 3, GL11.GL_FLOAT, false, Float.BYTES * 11, Float.BYTES * 8);
+    public void specifySceneVertexAttribute(ArrayList<Model> models) {
+        for (Model model : models) {
+            specifyVertexAttribute(model, "position", 3, GL11.GL_FLOAT, true, Float.BYTES * 9, 0);
+            specifyVertexAttribute(model, "texcoord", 3, GL11.GL_FLOAT, false, Float.BYTES * 9, Float.BYTES * 3);
+            specifyVertexAttribute(model, "normalVector", 3, GL11.GL_FLOAT, false, Float.BYTES * 9, Float.BYTES * 6);
+        }
     }
 
     public int getShaderProgramLocation() {
@@ -117,19 +124,21 @@ public class SceneShaderProgram extends ShaderProgram {
         GL20.glUniform1f(lightQuadratic, light.getQuadratic());
     }
 
-    public void setPointLights(Light light, int index) {
-        GL20.glUniform3f(getUniformLocation("pointLights[" + index + "].position"),
+    public void setPointLights(Light light) {
+        GL20.glUniform3f(getUniformLocation("pointLights[" + numberOfLights + "].position"),
                 light.getPosition().x, light.getPosition().y, light.getPosition().z);
-        GL20.glUniform3f(getUniformLocation("pointLights[" + index + "].ambient"), light.getAmbient().x,
+        GL20.glUniform3f(getUniformLocation("pointLights[" + numberOfLights + "].ambient"), light.getAmbient().x,
                 light.getAmbient().y, light.getAmbient().z);
-        GL20.glUniform3f(getUniformLocation("pointLights[" + index + "].diffuse"), light.getDiffuse().x,
+        GL20.glUniform3f(getUniformLocation("pointLights[" + numberOfLights + "].diffuse"), light.getDiffuse().x,
                 light.getDiffuse().y, light.getDiffuse().z);
-        GL20.glUniform3f(getUniformLocation("pointLights[" + index + "].specular"), light.getSpecular().x,
+        GL20.glUniform3f(getUniformLocation("pointLights[" + numberOfLights + "].specular"), light.getSpecular().x,
                 light.getSpecular().y, light.getSpecular().z);
 
-        GL20.glUniform1f(getUniformLocation("pointLights[" + index + "].constant"), light.getConstant());
-        GL20.glUniform1f(getUniformLocation("pointLights[" + index + "].linear"), light.getLinear());
-        GL20.glUniform1f(getUniformLocation("pointLights[" + index + "].quadratic"), light.getQuadratic());
+        GL20.glUniform1f(getUniformLocation("pointLights[" + numberOfLights + "].constant"), light.getConstant());
+        GL20.glUniform1f(getUniformLocation("pointLights[" + numberOfLights + "].linear"), light.getLinear());
+        GL20.glUniform1f(getUniformLocation("pointLights[" + numberOfLights + "].quadratic"), light.getQuadratic());
+        numberOfLights++;
+        GL20.glUniform1i(lightCount, numberOfLights);
     }
 
     public void setMaterial(Material material) {

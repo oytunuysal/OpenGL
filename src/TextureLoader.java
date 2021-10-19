@@ -19,10 +19,11 @@ public class TextureLoader {
 
     public static void loadBindTextures(ShaderProgram shaderProgram, String resourceLocation, int textureSlot) {
         Texture texture = null;
+        String textureFormat = resourceLocation.substring(resourceLocation.lastIndexOf(".") + 1);
         try {
             shaderProgram.use();
             GL13.glActiveTexture(textureSlot);
-            texture = org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(resourceLocation));
+            texture = org.newdawn.slick.opengl.TextureLoader.getTexture(textureFormat, ResourceLoader.getResourceAsStream(resourceLocation));
             texture.bind();
 
             GL20.glUniform1i(shaderProgram.getUniformLocation("tex"), 0);

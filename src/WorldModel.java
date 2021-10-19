@@ -1,5 +1,6 @@
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
@@ -18,10 +19,10 @@ import org.lwjgl.util.vector.Vector3f;
 public class WorldModel {
 
     //model matrix?
-    Model model;
+    ArrayList<Model> model;
     Matrix4f modelMatrix;
 
-    public WorldModel(Model model) {
+    public WorldModel(ArrayList<Model> model) {
         this.model = model;
         modelMatrix = new Matrix4f();
     }
@@ -42,20 +43,24 @@ public class WorldModel {
         this.modelMatrix.scale(vector);
     }
 
-    public FloatBuffer getModel() {
+    public FloatBuffer getModelMatrixf() {
         return GLUtils.toBuffer(modelMatrix);
     }
-
-    public int getVao() {
-        return model.getVao();
+    
+    public ArrayList<Model> getModels(){
+        return model;
     }
 
-    public int getVbo() {
-        return model.getVbo();
-    }
-
-    public int getVertexCount() {
-        return model.getVertexCount();
-    }
+//    public int getVao() {
+//        return model.getVao();
+//    }
+//
+//    public int getVbo() {
+//        return model.getVbo();
+//    }
+//
+//    public int getVertexCount() {
+//        return model.getVertexCount();
+//    }
 
 }

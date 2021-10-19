@@ -21,7 +21,7 @@ public abstract class ShaderProgram {
         GL20.glUseProgram(shaderProgramLocation);
     }
 
-    public void specifyVertexAttribute(WorldModel model, String attributeName, int size,
+    public void specifyVertexAttribute(Model model, String attributeName, int size,
             int type, boolean normalized, int stride, long bufferOffset) {
         //specifyAttributes?
         GL30.glBindVertexArray(model.getVao());

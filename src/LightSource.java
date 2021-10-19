@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -15,7 +16,7 @@ public class LightSource extends WorldModel {
     
     private Light light;
     
-    public LightSource(Model model, Light light) {
+    public LightSource(ArrayList<Model> model, Light light) {
         super(model);
         this.light = new Light(light);
     }

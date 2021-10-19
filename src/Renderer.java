@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -13,6 +14,7 @@ import org.lwjgl.opengl.GL30;
  * @author Oytun
  */
 public class Renderer {
+
     //not sure about here(SceneShaderProgram)
     SceneShaderProgram shaderProgram;
 
@@ -25,13 +27,16 @@ public class Renderer {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
     }
 
-    public void render(WorldModel model) {
+    public void render(WorldModel worldModel) {
         shaderProgram.use();
-        shaderProgram.setModelMatrix(model.getModel());
-        GL30.glBindVertexArray(model.getVao());
-        GL20.glEnableVertexAttribArray(0);
-        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
-        GL20.glDisableVertexAttribArray(0);
-        GL30.glBindVertexArray(0);
+        shaderProgram.setModelMatrix(worldModel.getModelMatrixf());
+        ArrayList<Model> models = worldModel.getModels();
+        for (Model model : models) {
+            GL30.glBindVertexArray(model.getVao());
+            GL20.glEnableVertexAttribArray(0);
+            GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
+            GL20.glDisableVertexAttribArray(0);
+            GL30.glBindVertexArray(0);
+        }
     }
 }

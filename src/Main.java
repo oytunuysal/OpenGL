@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -14,29 +15,36 @@ public class Main {
         OpenGLStarter.setupOpenGl();
         Keyboard.enableRepeatEvents(true);
         //setting up everything
-        Model model1 = new Model(Constants.cubeVertices, 36);
-        WorldModel worldModel1 = new WorldModel(model1);
-        WorldModel worldModel2 = new WorldModel(model1);
-        worldModel2.translate(new Vector3f(1.0f, 1.0f, 1.0f));
+        ArrayList<Model> modelbulb = ModelLoader.loadModel("objBulb.obj");
+        ArrayList<Model> modelCube = ModelLoader.loadModel("Jack Daniel Bottle.obj");
+        System.out.println("finished");
+
+//        Model model1 = new Model(Constants.cubeVertices, 36);
+        WorldModel worldModel1 = new WorldModel(modelCube);
+        WorldModel worldModel2 = new WorldModel(modelCube);
+        worldModel2.translate(new Vector3f(2.0f, 2.0f, 1.0f));
         Light light1 = new Light(new Vector3f(0.2f, 0.2f, 0.2f),
                 new Vector3f(0.7f, 0.7f, 0.7f), new Vector3f(1.0f, 1.0f, 1.0f),
                 1f, 0.09f, 0.032f);
 
-        LightSource lightSource1 = new LightSource(model1, light1);
+        LightSource lightSource1 = new LightSource(modelbulb, light1);
         lightSource1.translate(new Vector3f(1f, 0f, -1f));
         lightSource1.scale(new Vector3f(0.1f, 0.1f, 0.1f));
-        
-        LightSource lightSource2 = new LightSource(model1, light1);
+
+        LightSource lightSource2 = new LightSource(modelbulb, light1);
         lightSource2.translate(new Vector3f(0f, 0f, 1f));
         lightSource2.scale(new Vector3f(0.1f, 0.1f, 0.1f));
-        
+
         Material material1 = new Material(1, 1, 32f);
 
         SceneShaderProgram sceneShaderProgram = new SceneShaderProgram();
-        sceneShaderProgram.specifySceneVertexAttribute(worldModel1);
+        sceneShaderProgram.specifySceneVertexAttribute(modelbulb);
+        sceneShaderProgram.specifySceneVertexAttribute(modelCube);
 
-        TextureLoader.loadBindTextures(sceneShaderProgram, "res/container2.png", GL13.GL_TEXTURE0);
-        TextureLoader.loadBindTextures(sceneShaderProgram, "res/white.png", GL13.GL_TEXTURE1);
+        TextureLoader.loadBindTextures(sceneShaderProgram, "res/diffuse.jpg", GL13.GL_TEXTURE0);
+        TextureLoader.loadBindTextures(sceneShaderProgram, "res/diffuse.jpg", GL13.GL_TEXTURE1);
+        TextureLoader.loadBindTextures(sceneShaderProgram, "res/specular.jpg", GL13.GL_TEXTURE2);
+
         Camera camera = new Camera();
         camera.translateZ--;
         camera.moveCamera();
@@ -46,8 +54,8 @@ public class Main {
         sceneShaderProgram.setProjMatrix(camera.getProjectionMatrix());
 
         //setting up lighting
-        sceneShaderProgram.setPointLights(lightSource1.getLight(), 0);
-        sceneShaderProgram.setPointLights(lightSource2.getLight(), 1);
+        sceneShaderProgram.setPointLights(lightSource1.getLight());
+        sceneShaderProgram.setPointLights(lightSource2.getLight());
         sceneShaderProgram.setMaterial(material1);
 
         Renderer sceneRenderer = new Renderer(sceneShaderProgram);
