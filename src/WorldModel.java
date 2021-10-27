@@ -1,9 +1,6 @@
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -19,48 +16,60 @@ import org.lwjgl.util.vector.Vector3f;
 public class WorldModel {
 
     //model matrix?
-    ArrayList<Model> model;
-    Matrix4f modelMatrix;
+    ArrayList<Model> models;
+    private Vector3f scale;
+    private Vector3f rotation;
+    private Vector3f position;
 
     public WorldModel(ArrayList<Model> model) {
-        this.model = model;
-        modelMatrix = new Matrix4f();
+        this.models = model;
+        scale = new Vector3f(1, 1, 1);
+        rotation = new Vector3f();
+        position = new Vector3f();
     }
 
-    public Matrix4f getModelMatrix() {
-        return modelMatrix;
+    public ArrayList<Model> getModels() {
+        return models;
     }
 
-    public void rotate(float radians, Vector3f axis) {
-        Matrix4f.rotate((float) radians, axis, this.modelMatrix, this.modelMatrix);
+    public Vector3f getScale() {
+        return scale;
     }
 
-    public void translate(Vector3f vector) {
-        this.modelMatrix.translate(vector);
-    }
-    
-    public void scale(Vector3f vector){
-        this.modelMatrix.scale(vector);
+    public Vector3f getRotation() {
+        return rotation;
     }
 
-    public FloatBuffer getModelMatrixf() {
+    public Vector3f getPosition() {
+        return position;
+    }
+
+    public void scale(Vector3f scaleVector) {
+        scale.set(scaleVector.getX(), scaleVector.getY(), scaleVector.getZ());
+    }
+
+    public void rotate(Vector3f rotationVector) {
+        Vector3f.add(this.rotation, rotationVector, this.rotation);
+    }
+
+    public void translate(Vector3f offset) {
+        Vector3f.add(this.position, offset, this.position);
+    }
+
+    public static FloatBuffer getModelMatrixf(Matrix4f modelMatrix) {
         return GLUtils.toBuffer(modelMatrix);
     }
-    
-    public ArrayList<Model> getModels(){
-        return model;
+
+    public ArrayList<Model> getSubModels() {
+        return models;
     }
 
-//    public int getVao() {
-//        return model.getVao();
-//    }
-//
-//    public int getVbo() {
-//        return model.getVbo();
-//    }
-//
-//    public int getVertexCount() {
-//        return model.getVertexCount();
-//    }
-
+    public void setMatrixTo(Matrix4f worldMatrix) {
+        worldMatrix.setIdentity();
+        worldMatrix.translate(this.position);
+        worldMatrix.rotate((float) Math.toRadians(rotation.x), GeometryUtils.ROTATION_X);
+        worldMatrix.rotate((float) Math.toRadians(rotation.y), GeometryUtils.ROTATION_Y);
+        worldMatrix.rotate((float) Math.toRadians(rotation.z), GeometryUtils.ROTATION_Z);
+        worldMatrix.scale(this.scale);
+    }
 }

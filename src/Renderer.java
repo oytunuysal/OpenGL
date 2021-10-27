@@ -28,9 +28,11 @@ public class Renderer {
     }
 
     public void render(WorldModel worldModel) {
+        worldModel.setMatrixTo(Main.worldMatrix);
         shaderProgram.use();
-        shaderProgram.setModelMatrix(worldModel.getModelMatrixf());
-        ArrayList<Model> models = worldModel.getModels();
+        shaderProgram.setModelMatrix(WorldModel.getModelMatrixf(Main.worldMatrix));
+        //worldModel.getModelMatrixf()
+        ArrayList<Model> models = worldModel.getSubModels();
         for (Model model : models) {
             GL30.glBindVertexArray(model.getVao());
             GL20.glEnableVertexAttribArray(0);

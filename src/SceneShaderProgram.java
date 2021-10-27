@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -89,9 +90,11 @@ public class SceneShaderProgram extends ShaderProgram {
         normalVector(matrix);
     }
 
-    public void setViewMatrix(FloatBuffer matrix) {
+    public void setViewMatrix(FloatBuffer matrix, Vector3f viewPosition) {
         GL20.glUniformMatrix4(view, false, matrix);
-        GL20.glUniform3f(viewPos, -matrix.get(12), -matrix.get(13), -matrix.get(14));
+        GL20.glUniform3f(viewPos, -viewPosition.getX(), -viewPosition.getY(), -viewPosition.getZ());
+
+        //GL20.glUniform3f(viewPos, -matrix.get(12), -matrix.get(13), -matrix.get(14));
     }
 
     public void setProjMatrix(FloatBuffer matrix) {

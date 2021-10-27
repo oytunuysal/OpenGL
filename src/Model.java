@@ -1,12 +1,7 @@
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -31,7 +26,7 @@ public class Model {
         vao = GL30.glGenVertexArrays();
         vbo = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-        FloatBuffer floatBuffer = toBuffer(verteces);
+        FloatBuffer floatBuffer = BufferUtilities.toBuffer(verteces);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, floatBuffer, GL15.GL_STATIC_DRAW);
         this.vertexCount = vertexCount;
     }
@@ -47,34 +42,10 @@ public class Model {
             floatArray[index++] = vector.y;
             floatArray[index++] = vector.z;
         }
-        FloatBuffer floatBuffer = toBuffer(floatArray);
+        FloatBuffer floatBuffer = BufferUtilities.toBuffer(floatArray);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, floatBuffer, GL15.GL_STATIC_DRAW);
         this.vertexCount = vertexCount;
         this.name = name;
-    }
-
-    public static FloatBuffer toBuffer(float[] array) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
-        buffer.put(array);
-        buffer.flip();
-
-        return buffer;
-    }
-
-    public static IntBuffer toBuffer(int[] array) {
-        IntBuffer buffer = BufferUtils.createIntBuffer(array.length);
-        buffer.put(array);
-        buffer.flip();
-
-        return buffer;
-    }
-
-    public static ByteBuffer toBuffer(byte[] array) {
-        ByteBuffer buffer = BufferUtils.createByteBuffer(array.length);
-        buffer.put(array);
-        buffer.flip();
-
-        return buffer;
     }
 
     public int getVao() {
