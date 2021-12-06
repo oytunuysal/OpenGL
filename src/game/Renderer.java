@@ -7,6 +7,7 @@ import shaders.SceneShaderProgram;
 import shaders.ShaderProgram;
 import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector3f;
@@ -59,28 +60,38 @@ public class Renderer {
         isOutlineEnabled = false;
     }
 
-    public void render(WorldModel worldModel) {
+    public void stencilRender(GameObject gameObject) {
+        enableOutline();
+        originalScale.set(gameObject.getModel().getScale());
+        gameObject.getModel().scale(1.1f);
+        render(gameObject);
+        gameObject.getModel().scaleVector(originalScale);
+        disableOutline();
+    }
+
+    public void render(GameObject gameObject) {
         shaderProgram.use();
-        if (isOutlineEnabled == true && shaderProgram instanceof StencilShaderProgram) {
-            originalScale.set(worldModel.getScale());
-            worldModel.scale(1.1f);
-            worldModel.setMatrixTo(Main.worldMatrix);
-            worldModel.scaleVector(originalScale);
-        } else {
-            worldModel.setMatrixTo(Main.worldMatrix);
-        }
+        gameObject.getModel().setMatrixTo(Main.worldMatrix);
 
         //really bad
         if (shaderProgram instanceof DepthTestingShaderProgram) {
             ((DepthTestingShaderProgram) shaderProgram).setModelMatrix(WorldModel.getModelMatrixf(Main.worldMatrix));
         } else if (shaderProgram instanceof SceneShaderProgram) {
             ((SceneShaderProgram) shaderProgram).setModelMatrix(WorldModel.getModelMatrixf(Main.worldMatrix));
+            ((SceneShaderProgram) shaderProgram).setMaterial(gameObject.getMaterial());
+
         } else if (shaderProgram instanceof StencilShaderProgram) {
             ((StencilShaderProgram) shaderProgram).setModelMatrix(WorldModel.getModelMatrixf(Main.worldMatrix));
 
         }
+
         //worldModel.getModelMatrixf()
-        ArrayList<Model> models = worldModel.getSubModels();
+        ArrayList<Model> models = gameObject.getModel().getSubModels();
+        TextureLoader.bindTexture(gameObject.getTextureName(), GL13.GL_TEXTURE0);
+        TextureLoader.bindTexture(gameObject.getMaterial().getDiffuseTextureName(), GL13.GL_TEXTURE1);
+        TextureLoader.bindTexture(gameObject.getMaterial().getSpecularTextureName(), GL13.GL_TEXTURE2);
+        GL11.glGetError();
+
         for (Model model : models) {
             GL30.glBindVertexArray(model.getVao());
             GL20.glEnableVertexAttribArray(0);
@@ -88,5 +99,6 @@ public class Renderer {
             GL20.glDisableVertexAttribArray(0);
             GL30.glBindVertexArray(0);
         }
+
     }
 }

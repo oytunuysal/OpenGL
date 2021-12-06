@@ -33,7 +33,8 @@ public class DepthTestingShaderProgram extends ShaderProgram {
         GL20.glAttachShader(shaderProgramLocation, depthTesting.getShaderLocation());
         GL30.glBindFragDataLocation(shaderProgramLocation, 0, "outColor");
         GL20.glLinkProgram(shaderProgramLocation);
-
+        
+        
         sceneVertexShader.initialize();
     }
 

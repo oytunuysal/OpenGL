@@ -1,6 +1,7 @@
 package shaders;
 
-
+import game.GLUtils;
+import game.TextureLoader;
 import models.Light;
 import models.Material;
 import models.Model;
@@ -8,6 +9,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
@@ -46,7 +48,7 @@ public class SceneShaderProgram extends ShaderProgram {
         GL20.glAttachShader(shaderProgramLocation, sceneFragmentShader.getShaderLocation());
         GL30.glBindFragDataLocation(shaderProgramLocation, 0, "outColor");
         GL20.glLinkProgram(shaderProgramLocation);
-        
+
         sceneVertexShader.initialize();
         //Fragment Shader Uniforms
         viewPos = getUniformLocation("viewPos");
@@ -61,9 +63,9 @@ public class SceneShaderProgram extends ShaderProgram {
         materialDiffuse = getUniformLocation("material.diffuse");
         materialSpecular = getUniformLocation("material.specular");
         materialShininess = getUniformLocation("material.shininess");
-
         this.numberOfLights = 0;
         lightCount = getUniformLocation("lightCount");
+
     }
 
     public void specifySceneVertexAttribute(ArrayList<Model> models) {
@@ -144,8 +146,10 @@ public class SceneShaderProgram extends ShaderProgram {
 
     public void setMaterial(Material material) {
         super.use();
-        GL20.glUniform1i(materialDiffuse, material.getDiffuseMapLocation());
-        GL20.glUniform1i(materialSpecular, material.getSpecularMapLocation());
+//        GL20.glUniform1i(materialDiffuse, material.getDiffuseMapLocation());
+//        GL20.glUniform1i(materialSpecular, material.getSpecularMapLocation());
+//        TextureLoader.bindTexture(material.getDiffuseTextureName(), GL13.GL_TEXTURE1);
+//        TextureLoader.bindTexture(material.getSpecularTextureName(), GL13.GL_TEXTURE2);
         GL20.glUniform1f(materialShininess, material.getShininess());
     }
 

@@ -1,6 +1,7 @@
 package models;
 
 
+import game.Constants;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,6 +20,12 @@ import org.lwjgl.util.vector.Vector3f;
  * @author Oytun
  */
 public class ModelLoader {
+    
+    public static ArrayList<Model> loadQuad(){
+        ArrayList<Model> quad = new ArrayList<>();
+        quad.add(new Model(Constants.quadVertices, 6));
+        return quad;
+    }
 
     public static ArrayList<Model> loadModel(String sourceName) {
 

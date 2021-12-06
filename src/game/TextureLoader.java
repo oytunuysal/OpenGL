@@ -1,6 +1,8 @@
 package game;
 
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import shaders.ShaderProgram;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -20,24 +22,34 @@ import org.newdawn.slick.util.ResourceLoader;
  */
 public class TextureLoader {
 
-    public static void loadBindTextures(ShaderProgram shaderProgram, String resourceLocation, int textureSlot) {
-        Texture texture = null;
-        String textureFormat = resourceLocation.substring(resourceLocation.lastIndexOf(".") + 1);
-        try {
-            shaderProgram.use();
-            GL13.glActiveTexture(textureSlot);
-            texture = org.newdawn.slick.opengl.TextureLoader.getTexture(textureFormat, ResourceLoader.getResourceAsStream(resourceLocation));
-            texture.bind();
+    private static Map<String, Texture> textures = new HashMap<String, Texture>();
 
-            GL20.glUniform1i(shaderProgram.getUniformLocation("tex"), 0);
+    //Relative path
+    public static void loadTexture(String resourcePath) {
+        Texture texture = null;
+        int firstIndex = resourcePath.lastIndexOf("/");
+        int extension = resourcePath.lastIndexOf(".");
+        String textureName = resourcePath.substring(firstIndex + 1, extension);
+        System.out.println(textureName);
+        String textureFormat = resourcePath.substring(extension + 1);
+        System.out.println(textureFormat);
+        try {
+            texture = org.newdawn.slick.opengl.TextureLoader.getTexture(textureFormat, ResourceLoader.getResourceAsStream(resourcePath));
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-
+            textures.put(textureName, texture);
         } catch (Exception e) {
             System.err.print(e);
         }
 
+    }
+
+    public static void bindTexture(String textureName, int textureSlot) {
+        GL13.glActiveTexture(textureSlot);
+        Texture texture = textures.get(textureName);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
+//        GLUtils.errorCheck();
     }
 }

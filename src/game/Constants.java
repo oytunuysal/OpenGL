@@ -51,14 +51,15 @@ public class Constants {
         -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
         -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f
     };
-
+    //verteces 3 , texcoord 3, normalVector 3 
     public static final float[] quadVertices = {
-        -1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 1.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f, 0.0f,
-        -1.0f, 1.0f, 0.0f, 1.0f};
+        -1f, -1f, 0f, 0f, 0f, 0f, 0f, 0f, 1f,
+        -1f, 1f, 0f, 0f, 1f, 0f, 0f, 0f, 1f,
+        1f, -1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f,
+        1f, -1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f,
+        -1f, 1f, 0f, 0f, 1f, 0f, 0f, 0f, 1f,
+        1f, 1f, 0f, 1f, 1f, 0f, 0f, 0f, 1f
+    };
 
     public static final float[] planeVertices = {
         -2.0f, -1.0f, -0.6f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,

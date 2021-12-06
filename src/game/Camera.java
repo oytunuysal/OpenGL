@@ -52,7 +52,7 @@ public class Camera {
 
     private void createProjectionAndPerspective() {
         projectionMatrix = new Matrix4f();
-        setProjectionMatrix(projectionMatrix, 90, 0.1f, 5.0f);
+        setProjectionMatrix(projectionMatrix, 90, 0.1f, 10.0f);
     }
 
     private void setProjectionMatrix(Matrix4f matrix, float angleOfView, float near, float far) {

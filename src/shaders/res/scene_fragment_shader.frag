@@ -43,7 +43,10 @@ void main() {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 
     vec4 FragColor = vec4(result, 1.0);
-    outColor = FragColor * texture(tex, Texcoord);
+    vec4 texColor = FragColor * texture(tex, Texcoord);
+    if(texColor.a < 0.1)
+        discard;
+    outColor = texColor;
 }
 
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
