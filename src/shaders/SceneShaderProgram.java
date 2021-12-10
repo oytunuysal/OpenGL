@@ -100,7 +100,7 @@ public class SceneShaderProgram extends ShaderProgram {
         super.use();
 //        GL20.glUniformMatrix4(view, false, matrix);
         sceneVertexShader.setViewMatrix(matrix);
-        GL20.glUniform3f(viewPos, -viewPosition.getX(), -viewPosition.getY(), -viewPosition.getZ());
+        GL20.glUniform3f(viewPos, viewPosition.getX(), viewPosition.getY(), viewPosition.getZ());
 
         //GL20.glUniform3f(viewPos, -matrix.get(12), -matrix.get(13), -matrix.get(14));
     }

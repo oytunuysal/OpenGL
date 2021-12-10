@@ -7,8 +7,9 @@
             <file>file:/G:/GitHub/OpenGL/src/game/TextureLoader.java</file>
             <file>file:/G:/GitHub/OpenGL/src/shaders/res/fragment_shader.frag</file>
             <file>file:/G:/GitHub/OpenGL/src/models/Material.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/models/WorldModel.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/shaders/SceneShaderProgram.java</file>
             <file>file:/G:/GitHub/OpenGL/src/game/Main.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/models/LightSource.java</file>
             <file>file:/G:/GitHub/OpenGL/src/game/GLUtils.java</file>
         </group>
     </open-files>

@@ -24,7 +24,7 @@ public class Camera {
 
     //maybe store vec3 instead?
     public int rotateX, rotateY, rotateZ;
-    private Vector3f position;
+    private Vector3f position, negativePosition;
     private Matrix4f viewMatrix, projectionMatrix;
     private Vector2f direction2d;
 
@@ -33,6 +33,7 @@ public class Camera {
         rotateY = 0;
         rotateZ = 0;
         position = new Vector3f();
+        negativePosition = new Vector3f();
         rotateMovementVector();
         viewMatrix = new Matrix4f();
         moveCamera();
@@ -42,7 +43,6 @@ public class Camera {
     public void moveCamera() {
         this.viewMatrix.setIdentity();
         this.viewMatrix.rotate((float) Math.toRadians(rotateX), GeometryUtils.ROTATION_X);
-
         this.viewMatrix.rotate((float) Math.toRadians(rotateY), GeometryUtils.ROTATION_Y);
         this.viewMatrix.rotate((float) Math.toRadians(rotateZ), GeometryUtils.ROTATION_Z);
 
@@ -90,8 +90,9 @@ public class Camera {
     }
 
     public Vector3f getPosition() {
-        //negate?
-        return position;
+        position.negate(negativePosition);
+        return negativePosition;
+        //return position;
     }
 
     private void rotateMovementVector() {

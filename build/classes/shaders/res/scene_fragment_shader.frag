@@ -35,6 +35,9 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main() {
     vec3 norm = NormalVector;
+
+    //For some reason cameraPosition(viewpos) comes negative
+    //vec3 viewPos = -viewPos;
     vec3 viewDir = normalize(viewPos - FragPos);
 
     vec3 result;
@@ -44,8 +47,8 @@ void main() {
 
     vec4 FragColor = vec4(result, 1.0);
     vec4 texColor = FragColor * texture(tex, Texcoord);
-    if(texColor.a < 0.1)
-        discard;
+    //if(texColor.a < 0.1)
+    //    discard;
     outColor = texColor;
 }
 

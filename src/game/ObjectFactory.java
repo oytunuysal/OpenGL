@@ -19,6 +19,7 @@ import org.lwjgl.util.vector.Vector3f;
  *
  * @author Oytun
  */
+//TODO: change naming
 public class ObjectFactory {
     
     private static Vector3f cameraPosition;
@@ -32,7 +33,7 @@ public class ObjectFactory {
         objectList.add(gameObject);
     }
     
-    public static void refresh(ArrayList<GameObject> objectList) {
+    public static void order(ArrayList<GameObject> objectList) {
         for (GameObject gameObject : objectList) {
             gameObject.refreshDistance(cameraPosition);
         }

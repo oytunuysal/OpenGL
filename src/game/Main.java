@@ -9,6 +9,7 @@ import models.ModelLoader;
 import models.Material;
 import shaders.SceneShaderProgram;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -36,24 +37,30 @@ public class Main {
         System.out.println("Model loading finished.");
 
 //        Model model1 = new Model(Constants.cubeVertices, 36);
-        WorldModel worldModel1 = new WorldModel(backpack);
-        WorldModel worldModel2 = new WorldModel(backpack);
-        WorldModel worldModel3 = new WorldModel(quad);
-        worldModel2.translate(new Vector3f(2.0f, 2.0f, 1.0f));
-        worldModel3.translate(new Vector3f(2f, -2f, -1f));
+        WorldModel wmBackpack1 = new WorldModel(backpack);
+        WorldModel wmBackpack2 = new WorldModel(backpack);
+        WorldModel wmQuad1 = new WorldModel(quad);
+        WorldModel wmQuad2 = new WorldModel(quad);
+        WorldModel wmQuad3 = new WorldModel(quad);
+        WorldModel wmQuad4 = new WorldModel(quad);
+        wmBackpack2.translate(new Vector3f(2.0f, 2.0f, 1.0f));
+        wmQuad1.translate(new Vector3f(2.0f, 2.0f, 3.0f));
+        wmQuad2.translate(new Vector3f(2f, 2f, 3.5f));
+        wmQuad3.translate(new Vector3f(2f, 2f, 4.0f));
+        wmQuad4.translate(new Vector3f(2f, 2f, -0.5f));
         Light light1 = new Light(new Vector3f(0.2f, 0.2f, 0.2f),
                 new Vector3f(0.7f, 0.7f, 0.7f), new Vector3f(1.0f, 1.0f, 1.0f),
                 1f, 0.09f, 0.032f);
 
-        LightSource lightSource1 = new LightSource(modelbulb, light1);
-        lightSource1.scaleVector(new Vector3f(0.3f, 0.3f, 0.3f));
-        lightSource1.rotate(new Vector3f(90, 0, 0));
-        lightSource1.translate(new Vector3f(2f, 0f, 1f));
+        LightSource lsLight1 = new LightSource(modelbulb, light1);
+        lsLight1.scaleVector(new Vector3f(0.3f, 0.3f, 0.3f));
+        lsLight1.rotate(new Vector3f(90, 0, 0));
+        lsLight1.translate(new Vector3f(2f, 0f, 1f));
 
-        LightSource lightSource2 = new LightSource(modelbulb, light1);
-        lightSource2.scaleVector(new Vector3f(0.1f, 0.1f, 0.1f));
-        lightSource2.rotate(new Vector3f(90, 0, 0));
-        lightSource2.translate(new Vector3f(0f, 0f, 1f));
+        LightSource lsLight2 = new LightSource(modelbulb, light1);
+        lsLight2.scaleVector(new Vector3f(0.1f, 0.1f, 0.1f));
+        lsLight2.rotate(new Vector3f(90, 0, 0));
+        lsLight2.translate(new Vector3f(0f, 0f, 1f));
 
         //SceneShaderProgram
         SceneShaderProgram sceneShaderProgram = new SceneShaderProgram();
@@ -78,10 +85,14 @@ public class Main {
         TextureLoader.loadTexture("res/grass.png");
         TextureLoader.loadTexture("res/white.png");
         TextureLoader.loadTexture("res/4.png");
+        TextureLoader.loadTexture("res/window.png");
+        TextureLoader.loadTexture("res/window2.png");
 
         Material mBackpack = new Material("diffuse", "specular", 32f);
         Material mLightbulb = new Material("white", "white", 0f);
         Material mGrass = new Material("grass", "grass", 0f);
+        Material mWindow = new Material("window", "window", 0f);
+        Material mWindow2 = new Material("window2", "window2", 0f);
 
         Camera camera = new Camera();
         camera.offsetTranslate(new Vector3f(0, 0, -1));
@@ -98,8 +109,8 @@ public class Main {
         stencilShaderProgram.setProjMatrix(camera.getProjectionMatrix());
 
         //setting up lighting
-        sceneShaderProgram.setPointLights(lightSource1.getLight());
-        sceneShaderProgram.setPointLights(lightSource2.getLight());
+        sceneShaderProgram.setPointLights(lsLight1.getLight());
+        sceneShaderProgram.setPointLights(lsLight2.getLight());
 
         //Setting material
 //        sceneShaderProgram.setMaterial(material1);
@@ -112,20 +123,31 @@ public class Main {
 
         //creating GameOBjects
         //diffuse is a texture name here.
-        ArrayList<GameObject> gameObjects = new ArrayList<>();
-        GameObject backpack1 = new GameObject(worldModel1, "diffuse", mBackpack);
-        GameObject backpack2 = new GameObject(worldModel2, "diffuse", mBackpack);
-        GameObject lightbulb1 = new GameObject(lightSource1, "white", mLightbulb);
-        GameObject lightbulb2 = new GameObject(lightSource2, "white", mLightbulb);
-        GameObject grass = new GameObject(worldModel3, "grass", mGrass);
+        ArrayList<GameObject> opaqueObjects = new ArrayList<>();
+        ArrayList<GameObject> transparentObjects = new ArrayList<>();
+        GameObject backpack1 = new GameObject(wmBackpack1, "diffuse", mBackpack);
+        GameObject backpack2 = new GameObject(wmBackpack2, "diffuse", mBackpack);
+        GameObject lightbulb1 = new GameObject(lsLight1, "white", mLightbulb);
+        GameObject lightbulb2 = new GameObject(lsLight2, "white", mLightbulb);
+        GameObject grass = new GameObject(wmQuad1, "grass", mGrass);
+        GameObject window = new GameObject(wmQuad2, "window", mWindow);
+        GameObject window1 = new GameObject(wmQuad3, "window2", mWindow2);
+        GameObject window2 = new GameObject(wmQuad4, "window", mWindow);
 
         //I need to seperate opaque objects and sort them near to far
         ObjectFactory.setCameraPosition(camera.getPosition());
-        gameObjects.add(backpack1);
-        gameObjects.add(backpack2);
-        gameObjects.add(lightbulb1);
-        gameObjects.add(lightbulb2);
-        gameObjects.add(grass);
+        opaqueObjects.add(backpack1);
+        opaqueObjects.add(backpack2);
+        opaqueObjects.add(lightbulb1);
+        opaqueObjects.add(lightbulb2);
+        transparentObjects.add(grass);
+        transparentObjects.add(window);
+        transparentObjects.add(window1);
+        transparentObjects.add(window2);
+
+        //Enable Blending
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         //Game loop starts
         boolean active = true;
@@ -144,21 +166,24 @@ public class Main {
 
             Renderer.enableStencil();
 
-            //sorted by distance
-            ObjectFactory.refresh(gameObjects);
+            //sorted objects by distance
+            ObjectFactory.order(opaqueObjects);
+            Collections.reverse(opaqueObjects);
+            ObjectFactory.order(transparentObjects);
+//            Collections.reverse(transparentObjects);
 
             //rendering stuff
-            for (GameObject gameObject : gameObjects) {
-                rendererList.get(activeRenderer).render(gameObject);
-            }
-
+            rendererList.get(activeRenderer).render(opaqueObjects);
             for (int i = 0; i < stencilCount; i++) {
-                sencilRenderer.stencilRender(gameObjects.get(i));
+                sencilRenderer.stencilRender(opaqueObjects.get(i));
             }
-
+            //disable writing to depth buffer
+            GL11.glDepthMask(false);
+            rendererList.get(activeRenderer).render(transparentObjects);
+            GL11.glDepthMask(true);
             if (loopCount == 0) {
                 stencilCount++;
-                stencilCount = stencilCount % (gameObjects.size() + 1);
+                stencilCount = stencilCount % (opaqueObjects.size() + 1);
             }
 
             // Keyboard
@@ -174,7 +199,7 @@ public class Main {
                 depthTestingShaderProgram.setViewMatrix(camera.getViewMatrix());
                 stencilShaderProgram.setViewMatrix(camera.getViewMatrix());
                 ObjectFactory.setCameraPosition(camera.getPosition());
-                System.out.println(-camera.getPosition().x + ", " + -camera.getPosition().y + ", " + -camera.getPosition().z);
+//                System.out.println(camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z);
             }
 
             loopCount++;

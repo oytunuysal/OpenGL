@@ -49,9 +49,9 @@ public class GameObject implements Comparable<GameObject> {
     }
 
     public void refreshDistance(Vector3f cameraPosition) {
-        this.distanceToCamera = Math.sqrt(Math.pow(-cameraPosition.x - getPosition().x, 2)
-                + Math.pow(-cameraPosition.y - getPosition().y, 2)
-                + Math.pow(-cameraPosition.z - getPosition().z, 2));
+        this.distanceToCamera = Math.sqrt(Math.pow(cameraPosition.x - getPosition().x, 2)
+                + Math.pow(cameraPosition.y - getPosition().y, 2)
+                + Math.pow(cameraPosition.z - getPosition().z, 2));
     }
 
     //might cause some issues

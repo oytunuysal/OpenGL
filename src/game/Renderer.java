@@ -69,6 +69,12 @@ public class Renderer {
         disableOutline();
     }
 
+    public void render(ArrayList<GameObject> gameObjects) {
+        for (GameObject gameObject : gameObjects) {
+            render(gameObject);
+        }
+    }
+
     public void render(GameObject gameObject) {
         shaderProgram.use();
         gameObject.getModel().setMatrixTo(Main.worldMatrix);
