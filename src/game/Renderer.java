@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector3f;
+import shaders.PostProcessingProgram;
 import shaders.StencilShaderProgram;
 
 /*
@@ -106,5 +107,30 @@ public class Renderer {
             GL30.glBindVertexArray(0);
         }
 
+    }
+
+    public static void postProcess(PostProcessingProgram postProcessingProgram,
+            ArrayList<Model> quad2d, FrameBuffer frameBuffer) {
+        frameBuffer.unbindCurrentFrameBuffer();
+        Renderer.clear();
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        postProcessingProgram.use();
+        GL30.glBindVertexArray(quad2d.get(0).getVao());
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, frameBuffer.getFrameBufferTexture());
+        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, 6);
+
+    }
+
+    public static void skybox(SkyboxProgram skyboxProgram, ArrayList<Model> skyboxCube) {
+        skyboxProgram.use();
+        GL11.glDepthMask(false);
+//        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        GL30.glBindVertexArray(skyboxCube.get(0).getVao());
+        skyboxProgram.setSkybox();
+//        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, skyboxProgram.getCubeMap().getCubemapId());
+        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, 36);
+//        GL11.glDepthFunc(GL11.GL_LESS);
+        GL11.glDepthMask(true);
     }
 }

@@ -68,6 +68,10 @@ public class Camera {
     public FloatBuffer getViewMatrix() {
         return GLUtils.toBuffer(viewMatrix);
     }
+    
+    public FloatBuffer getViewMatrixWithoutTrans(){
+        return GLUtils.removeTransformations(viewMatrix);
+    }
 
     public FloatBuffer getProjectionMatrix() {
         return GLUtils.toBuffer(projectionMatrix);

@@ -3,14 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/GitHub/OpenGL/src/shaders/res/scene_vertex_shader.vert</file>
             <file>file:/G:/GitHub/OpenGL/src/game/TextureLoader.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/shaders/res/fragment_shader.frag</file>
-            <file>file:/G:/GitHub/OpenGL/src/models/Material.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/shaders/SceneShaderProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/game/SkyboxProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/models/ModelLoader.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/models/Model.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/models/WorldModel.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/game/CubeMap.java</file>
             <file>file:/G:/GitHub/OpenGL/src/game/Main.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/models/LightSource.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/game/GLUtils.java</file>
         </group>
     </open-files>
 </project-private>

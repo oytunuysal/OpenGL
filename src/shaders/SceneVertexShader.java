@@ -19,7 +19,7 @@ import org.lwjgl.util.vector.Vector3f;
 public class SceneVertexShader extends Shader {
 
     private int model, view, proj, uniformInverseTransposedModel;
-    int shaderProgramLocation;
+    private int shaderProgramLocation;
 
     public SceneVertexShader(int shaderType, String sourceFileName, int shaderProgramLocation) {
         super(shaderType, sourceFileName);

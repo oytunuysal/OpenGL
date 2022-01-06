@@ -1,6 +1,5 @@
 package game;
 
-
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -26,5 +25,17 @@ public class GLUtils {
         matrix.store(floatBuffer);
         floatBuffer.flip();
         return floatBuffer;
+    }
+
+    public static FloatBuffer removeTransformations(Matrix4f matrix) {
+        Matrix4f transMatrix = new Matrix4f(matrix);
+//        transMatrix.m03 = 0f;
+//        transMatrix.m13 = 0f;
+//        transMatrix.m23 = 0f;
+        transMatrix.m30 = 0f;
+        transMatrix.m31 = 0f;
+        transMatrix.m32 = 0f;
+//        transMatrix.m33 = 0f;
+        return toBuffer(transMatrix);
     }
 }

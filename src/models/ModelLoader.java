@@ -21,10 +21,22 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class ModelLoader {
     
-    public static ArrayList<Model> loadQuad(){
+    public static ArrayList<Model> load3dQuad(){
         ArrayList<Model> quad = new ArrayList<>();
-        quad.add(new Model(Constants.quadVertices, 6));
+        quad.add(new Model(Constants.quad3dVertices, 6));
         return quad;
+    }
+    
+    public static ArrayList<Model> load2dQuad(){
+        ArrayList<Model> quad = new ArrayList<>();
+        quad.add(new Model(Constants.quad2dVertices, 6));
+        return quad;
+    }
+    
+    public static ArrayList<Model> loadSkybox(){
+        ArrayList<Model> cube = new ArrayList<>();
+        cube.add(new Model(Constants.skyboxVertices, 6));
+        return cube;
     }
 
     public static ArrayList<Model> loadModel(String sourceName) {
