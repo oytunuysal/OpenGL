@@ -23,7 +23,7 @@ import org.newdawn.slick.util.ResourceLoader;
  * @author Oytun
  */
 public class TextureLoader {
-    
+
     private static Map<String, Texture> textures = new HashMap<String, Texture>();
 
     //Relative path
@@ -45,9 +45,9 @@ public class TextureLoader {
         } catch (Exception e) {
             System.err.print(e);
         }
-        
+
     }
-    
+
     public static void loadCubemapTextures(ArrayList<String> faces) {
         for (int i = 0; i < faces.size(); i++) {
             String face = faces.get(i);
@@ -64,7 +64,7 @@ public class TextureLoader {
                 GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL11.GL_RGB, texture.getImageWidth(), texture.getImageHeight(),
                         0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, BufferUtilities.toBuffer(texture.getTextureData()));
                 textures.put(textureName, texture);
-                
+
             } catch (Exception e) {
                 System.err.print(e);
             }
@@ -75,11 +75,16 @@ public class TextureLoader {
         GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL12.GL_TEXTURE_WRAP_R, GL12.GL_CLAMP_TO_EDGE);
     }
-    
+
     public static void bindTexture(String textureName, int textureSlot) {
         GL13.glActiveTexture(textureSlot);
         Texture texture = textures.get(textureName);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
 //        GLUtils.errorCheck();
+    }
+
+    public static void bindCubemap(int cubemapId, int textureSlot) {
+        GL13.glActiveTexture(textureSlot);
+        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, cubemapId);
     }
 }

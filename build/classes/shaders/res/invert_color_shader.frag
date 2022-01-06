@@ -4,7 +4,8 @@
     layout (binding = 0) uniform sampler2D tex;
     void main()
     {
-        vec4 FragColor = texture(tex, TexCoords);
-        float average = (FragColor.r + FragColor.g + FragColor.b) / 3.0;
-        outColor = vec4(average, average, average, 1.0);
+//        vec4 FragColor = texture(tex, TexCoords);
+//        float average = (FragColor.r + FragColor.g + FragColor.b) / 3.0;
+//        outColor = vec4(average, average, average, 1.0);
+        outColor =  texture(tex, TexCoords);
     }  

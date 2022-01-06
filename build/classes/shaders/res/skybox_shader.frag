@@ -3,7 +3,7 @@ out vec4 FragColor;
 
 in vec3 TexCoords;
 
-layout (binding = 0) uniform samplerCube skybox;
+layout (binding = 10) uniform samplerCube skybox;
 
 void main()
 {    

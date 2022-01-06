@@ -26,10 +26,12 @@ in vec3 NormalVector;
 in vec3 FragPos;
 out vec4 outColor;
 layout (binding = 0) uniform sampler2D tex;
+layout (binding = 10) uniform samplerCube skybox;
 uniform vec3 viewPos;
 
 uniform Material material;
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
+vec3 CalculateEnvironmentReflections();
 
 //uniform Light light;
 
@@ -42,14 +44,23 @@ void main() {
 
     vec3 result;
 
-    for(int i = 0; i < lightCount; i++)
+    for(int i = 0; i < lightCount; i++){
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+        result += CalculateEnvironmentReflections();
+    }
+
 
     vec4 FragColor = vec4(result, 1.0);
     vec4 texColor = FragColor * texture(tex, Texcoord);
     //if(texColor.a < 0.1)
     //    discard;
     outColor = texColor;
+}
+
+vec3 CalculateEnvironmentReflections() {
+    vec3 I = normalize(FragPos - viewPos);
+    vec3 R = reflect(I, normalize(NormalVector));
+    return vec3(texture(skybox, R).rgb) * vec3(texture(material.specular, Texcoord)) ;
 }
 
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)

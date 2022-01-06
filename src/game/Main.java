@@ -87,15 +87,16 @@ public class Main {
         stencilShaderProgram.specifySceneVertexAttribute(quad3d);
 
         ArrayList<String> facePaths = new ArrayList<>();
-        facePaths.add("res/skybox/right.png");
-        facePaths.add("res/skybox/left.png");
-        facePaths.add("res/skybox/top.png");
-        facePaths.add("res/skybox/bottom.png");
-        facePaths.add("res/skybox/front.png");
-        facePaths.add("res/skybox/back.png");
+        facePaths.add("res/skybox/right.jpg");
+        facePaths.add("res/skybox/left.jpg");
+        facePaths.add("res/skybox/top.jpg");
+        facePaths.add("res/skybox/bottom.jpg");
+        facePaths.add("res/skybox/front.jpg");
+        facePaths.add("res/skybox/back.jpg");
 
         //Cubemap
         CubeMap cubeMap = new CubeMap(facePaths);
+        cubeMap.setSkybox();
 
         //Skybox
         SkyboxProgram skyboxProgram = new SkyboxProgram(cubeMap);

@@ -8,6 +8,7 @@ package game;
 import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import shaders.ShaderProgram;
 
 /**
  *
@@ -42,6 +43,11 @@ public class CubeMap {
 
     public int getCubemapId() {
         return cubemapId;
+    }
+
+    public void setSkybox() {
+//        shaderProgram.use();
+        TextureLoader.bindCubemap(cubemapId, GL13.GL_TEXTURE10);
     }
 
 }
