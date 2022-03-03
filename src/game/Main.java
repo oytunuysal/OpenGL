@@ -1,13 +1,21 @@
 package game;
 
-import shaders.DepthTestingShaderProgram;
-import models.WorldModel;
-import models.LightSource;
-import models.Light;
-import models.Model;
-import models.ModelLoader;
-import models.Material;
-import shaders.SceneShaderProgram;
+import rendering.models.ModelUtilities;
+import rendering.TextureLoader;
+import rendering.FrameBuffer;
+import rendering.CubeMap;
+import rendering.Camera;
+import rendering.Renderer;
+import rendering.shaders.SkyboxProgram;
+import java.nio.FloatBuffer;
+import rendering.shaders.DepthTestingShaderProgram;
+import rendering.models.WorldModel;
+import rendering.models.LightSource;
+import rendering.Light;
+import rendering.models.Model;
+import rendering.models.ModelLoader;
+import rendering.Material;
+import rendering.shaders.SceneShaderProgram;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -17,12 +25,14 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL31;
 import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
-import shaders.PostProcessingProgram;
-import shaders.StencilShaderProgram;
+import rendering.shaders.PostProcessingProgram;
+import rendering.shaders.StencilShaderProgram;
 
 public class Main {
 
@@ -87,12 +97,12 @@ public class Main {
         stencilShaderProgram.specifySceneVertexAttribute(quad3d);
 
         ArrayList<String> facePaths = new ArrayList<>();
-        facePaths.add("res/skybox/right.jpg");
-        facePaths.add("res/skybox/left.jpg");
-        facePaths.add("res/skybox/top.jpg");
-        facePaths.add("res/skybox/bottom.jpg");
-        facePaths.add("res/skybox/front.jpg");
-        facePaths.add("res/skybox/back.jpg");
+        facePaths.add("res/skybox/right.png");
+        facePaths.add("res/skybox/left.png");
+        facePaths.add("res/skybox/top.png");
+        facePaths.add("res/skybox/bottom.png");
+        facePaths.add("res/skybox/front.png");
+        facePaths.add("res/skybox/back.png");
 
         //Cubemap
         CubeMap cubeMap = new CubeMap(facePaths);
@@ -130,18 +140,43 @@ public class Main {
         camera.offsetTranslate(new Vector3f(0, 0, -1));
         camera.moveCamera();
 
+        //UniformBufferObject
+        int uniformSceneBlockIndex = GL31.glGetUniformBlockIndex(sceneShaderProgram.
+                getSceneVertexShader().getShaderLocation(), "Matrices");
+        int uniformDepthTestingBlockIndex = GL31.glGetUniformBlockIndex(depthTestingShaderProgram.
+                getSceneVertexShader().getShaderLocation(), "Matrices");
+        int uniformStencilBlockIndex = GL31.glGetUniformBlockIndex(stencilShaderProgram.
+                getSceneVertexShader().getShaderLocation(), "Matrices");
+
+        GL31.glUniformBlockBinding(sceneShaderProgram.
+                getSceneVertexShader().getShaderLocation(), uniformSceneBlockIndex, 0);
+        GL31.glUniformBlockBinding(depthTestingShaderProgram.
+                getSceneVertexShader().getShaderLocation(), uniformDepthTestingBlockIndex, 0);
+        GL31.glUniformBlockBinding(stencilShaderProgram.
+                getSceneVertexShader().getShaderLocation(), uniformStencilBlockIndex, 0);
+
+        int uboMatrices = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, uboMatrices);
+        GL15.glBufferData(GL31.GL_UNIFORM_BUFFER, (long) (32 * Float.BYTES), GL15.GL_STATIC_DRAW);
+        GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, 0);
+        GL30.glBindBufferRange(GL31.GL_UNIFORM_BUFFER, 0, uboMatrices, 0, (32 * Float.BYTES));
+
+        GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, uboMatrices);
+        GL15.glBufferSubData(GL31.GL_UNIFORM_BUFFER, 0, camera.getProjectionMatrix());
+        GL15.glBufferSubData(GL31.GL_UNIFORM_BUFFER, 16 * Float.BYTES, camera.getViewMatrix());
+
         //setting uniforms
-        sceneShaderProgram.setViewMatrix(camera.getViewMatrix(), camera.getPosition());
-        sceneShaderProgram.setProjMatrix(camera.getProjectionMatrix());
+//        sceneShaderProgram.setViewMatrix(camera.getViewMatrix());
+//        sceneShaderProgram.setProjMatrix(camera.getProjectionMatrix());
+        sceneShaderProgram.setViewPosition(camera.getPosition());
 
-        depthTestingShaderProgram.setViewMatrix(camera.getViewMatrix());
-        depthTestingShaderProgram.setProjMatrix(camera.getProjectionMatrix());
-
-        stencilShaderProgram.setViewMatrix(camera.getViewMatrix());
-        stencilShaderProgram.setProjMatrix(camera.getProjectionMatrix());
-
+//        depthTestingShaderProgram.setViewMatrix(camera.getViewMatrix());
+//        depthTestingShaderProgram.setProjMatrix(camera.getProjectionMatrix());
+//
+//        stencilShaderProgram.setViewMatrix(camera.getViewMatrix());
+//        stencilShaderProgram.setProjMatrix(camera.getProjectionMatrix());
         skyboxProgram.setViewMatrix(camera.getViewMatrixWithoutTrans());
-        skyboxProgram.setProjMatrix(camera.getProjectionMatrix());
+//        skyboxProgram.setProjMatrix(camera.getProjectionMatrix());
 
         //setting up lighting
         sceneShaderProgram.setPointLights(lsLight1.getLight());
@@ -159,19 +194,19 @@ public class Main {
 
         //creating GameOBjects
         //diffuse is a texture name here.
-        ArrayList<GameObject> opaqueObjects = new ArrayList<>();
-        ArrayList<GameObject> transparentObjects = new ArrayList<>();
-        GameObject backpack1 = new GameObject(wmBackpack1, "diffuse", mBackpack);
-        GameObject backpack2 = new GameObject(wmBackpack2, "diffuse", mBackpack);
-        GameObject lightbulb1 = new GameObject(lsLight1, "white", mLightbulb);
-        GameObject lightbulb2 = new GameObject(lsLight2, "white", mLightbulb);
-        GameObject grass = new GameObject(wmQuad1, "grass", mGrass);
-        GameObject window = new GameObject(wmQuad2, "window", mWindow);
-        GameObject window1 = new GameObject(wmQuad3, "window2", mWindow2);
-        GameObject window2 = new GameObject(wmQuad4, "window", mWindow);
+        ArrayList<WorldObject> opaqueObjects = new ArrayList<>();
+        ArrayList<WorldObject> transparentObjects = new ArrayList<>();
+        WorldObject backpack1 = new WorldObject(wmBackpack1, "diffuse", mBackpack);
+        WorldObject backpack2 = new WorldObject(wmBackpack2, "diffuse", mBackpack);
+        WorldObject lightbulb1 = new WorldObject(lsLight1, "white", mLightbulb);
+        WorldObject lightbulb2 = new WorldObject(lsLight2, "white", mLightbulb);
+        WorldObject grass = new WorldObject(wmQuad1, "grass", mGrass);
+        WorldObject window = new WorldObject(wmQuad2, "window", mWindow);
+        WorldObject window1 = new WorldObject(wmQuad3, "window2", mWindow2);
+        WorldObject window2 = new WorldObject(wmQuad4, "window", mWindow);
 
         //I need to seperate opaque objects and sort them near to far
-        ObjectFactory.setCameraPosition(camera.getPosition());
+        ModelUtilities.setCameraPosition(camera.getPosition());
         opaqueObjects.add(backpack1);
         opaqueObjects.add(backpack2);
         opaqueObjects.add(lightbulb1);
@@ -210,9 +245,9 @@ public class Main {
             Renderer.enableStencil();
 
             //sorted objects by distance
-            ObjectFactory.order(opaqueObjects);
+            ModelUtilities.order(opaqueObjects);
             Collections.reverse(opaqueObjects);
-            ObjectFactory.order(transparentObjects);
+            ModelUtilities.order(transparentObjects);
 //            Collections.reverse(transparentObjects);
 
             GL11.glEnable(GL11.GL_CULL_FACE);
@@ -245,11 +280,16 @@ public class Main {
                 lock = false;
             }
             if (camera.update()) {
-                sceneShaderProgram.setViewMatrix(camera.getViewMatrix(), camera.getPosition());
-                depthTestingShaderProgram.setViewMatrix(camera.getViewMatrix());
-                stencilShaderProgram.setViewMatrix(camera.getViewMatrix());
+                GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, uboMatrices);
+                GL15.glBufferSubData(GL31.GL_UNIFORM_BUFFER, 16 * Float.BYTES, camera.getViewMatrix());
+                GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, 0);
+
+//                sceneShaderProgram.setViewMatrix(camera.getViewMatrix());
+                sceneShaderProgram.setViewPosition(camera.getPosition());
+//                depthTestingShaderProgram.setViewMatrix(camera.getViewMatrix());
+//                stencilShaderProgram.setViewMatrix(camera.getViewMatrix());
                 skyboxProgram.setViewMatrix(camera.getViewMatrixWithoutTrans());
-                ObjectFactory.setCameraPosition(camera.getPosition());
+                ModelUtilities.setCameraPosition(camera.getPosition());
 //                System.out.println(camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z);
             }
 

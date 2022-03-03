@@ -3,13 +3,39 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/GitHub/OpenGL/src/game/TextureLoader.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/game/SkyboxProgram.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/models/ModelLoader.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/models/Model.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/models/WorldModel.java</file>
-            <file>file:/G:/GitHub/OpenGL/src/game/CubeMap.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/FrameBuffer.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/game/Input.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/GeometryUtils.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/res/ModelReader.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/BufferUtilities.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/res/depth_testing.frag</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/ModelUtilities.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/StencilShaderProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/LightSource.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/SceneShaderProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/res/scene_vertex_shader.vert</file>
+            <file>file:/G:/GitHub/OpenGL/src/game/OpenGLStarter.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/game/WorldObject.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/WorldModel.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/DepthTestingShaderProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/SceneVertexShader.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/Material.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/SkyboxProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/PostProcessingProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/ShaderProgram.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/PostProcessingVertexShader.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/TextureLoader.java</file>
             <file>file:/G:/GitHub/OpenGL/src/game/Main.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/Mesh.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/Renderer.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/ModelLoader.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/Shader.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/IOutlinable.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/shaders/res/ShaderReader.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/CubeMap.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/Camera.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/rendering/models/Model.java</file>
+            <file>file:/G:/GitHub/OpenGL/src/game/GLUtils.java</file>
         </group>
     </open-files>
 </project-private>
